@@ -2,17 +2,19 @@
 
 🚧 **Project Status: In Development** 🚧
 
-This project is currently in its early stages of development.
+This repository contains the beginnings of a Micromouse line-following robot project. The firmware targets ESP32 as the main development board and includes Arduino Nano test sketches under `Nano_test_code/` that show motor and sensor tests, plus wireless PID tuning examples.
 
 ## Overview
 
-A micromouse robot designed to follow lines autonomously using ESP32/Arduino NANO microcontroller. This project aims to create an intelligent line-following robot capable of navigating predefined paths.
+The goal is to build a reliable line-following robot using a QTR sensor array, TB6612 motor driver, and an ESP32 (or Arduino Nano for simple tests). The codebase will grow to include motor control, PID tuning, calibration, and eventually navigation and obstacle-handling modules.
 
 ## Hardware
 
-- **Microcontroller**: ESP32/Arduino NANO
+- **Primary target**: ESP32 development boards
+- **Optional**: Arduino Nano (test sketches)
 - **Motor Driver**: TB6612FNG
-- **Display**: L293D-based display system
+- **Line Sensors**: QTR analog/RC sensor arrays
+- **Other components**: Motors, wheels, battery, jumper wires, and a chassis
 
 ## Project Structure
 ```
@@ -25,14 +27,14 @@ micromouse-line-follower/
 │   │   └── TB6612FNG.PDF
 ├── include/                # Header files
 ├── lib/                    # Project libraries
-├── Nano_test_code/         # Arduino Nano / test sketches
+├── Nano_test_code/         # Arduino Nano / example sketches and tests
 │   ├── line_follower/
 │   ├── line_follower_github/
 │   ├── PID_Bluethooth/
 │   ├── Moter_test/
 │   └── QTR_test/
-├── src/
-│   └── main.cpp            # Main application code (ESP32)
+├── src/                    # ESP32 firmware (PlatformIO)
+│   └── main.cpp
 ├── test/                   # Unit or hardware test fixtures
 ├── .gitignore
 ├── LICENSE
@@ -44,86 +46,51 @@ micromouse-line-follower/
 
 ### Prerequisites
 
-- [PlatformIO](https://platformio.org/) IDE or CLI
-- ESP32 development board
-- Required components (see datasheets in `docs/component_datasheet/`)
+- [PlatformIO](https://platformio.org/) (recommended for ESP32 development)
+- Arduino IDE (for the Nano example sketches)
+- ESP32 or Arduino Nano board, TB6612 motor driver, QTR8 sensor array, motors and battery
 
-### Installation
+### Quick Start (ESP32 - PlatformIO)
 
-1. Clone the repository:
-```bash
-git clone https://github.com/sarpharaj-09/micromouse-line-follower.git
-cd micromouse-line-follower
-```
-
-2. Open the project in PlatformIO
-
-3. Build the project:
-```bash
+```powershell
+cd 'C:\projects\micromouse\micromouse-line-follower'
 pio run
+pio run -e esp32dev -t upload
 ```
 
-4. Upload to ESP32:
-```bash
-pio run --target upload
-```
+### Quick Start (Arduino Nano - Arduino IDE)
 
-## Documentation
+1. Open Arduino IDE > File > Open > `Nano_test_code/<sketch>/sketch.ino`.
+2. Install required libraries in Arduino Library Manager (SparkFun_TB6612, QTRSensors).
+3. Select the correct board and port, then upload.
 
-Datasheets for all components are available in the `docs/component_datasheet/` directory:
-- ESP32 microcontroller datasheet
-- TB6612FNG motor driver datasheet
-- L293D motor driver IC datasheet
+## Tests and Example Sketches (Nano_test_code)
 
-## Roadmap
+This folder contains simple sketches and tests targeted at Arduino Nano or similar 8-bit boards, useful while developing sensors and motor drivers:
 
-- [ ] Basic line detection
-- [ ] Motor control implementation
-- [ ] PID controller for smooth following
-- [ ] Obstacle detection (future enhancement)
-- [ ] Speed optimization
+- `line_follower/` — Wireless PID line following sketch that accepts Serial/Bluetooth commands (KP, KI, KD, ILIMIT, MAX, BASE, BLACK/WHITE, STATUS, HELP). Designed for real-time tuning.
+- `PID_Bluethooth/` — An advanced Bluetooth serial sketch with state handling (IDLE, CALIBRATING, RUNNING), safe start/stop, and command parsing.
+- `line_follower_github/` — A basic line follower sketch for quick functional testing.
+- `Moter_test/` — Motor test commands for TB6612 (Forward, Backward, Left, Right, Stop).
+- `QTR_test/` — Raw QTR sensor test code printing sensor readings.
 
-## Tests & Example Sketches (Nano_test_code)
+For each sketch, the comments at the top list the pin assignments and a summary of commands or behavior.
 
-I have added a `Nano_test_code/` folder with useful example sketches and test programs for Arduino Nano/ESP32 users. These include hardware tests, QTR sensor tests, and two line follower sketches — one of which supports wireless (serial/Bluetooth) PID tuning.
+## Recommended workflow for edits and testing
 
-Folder contents:
-- `Nano_test_code/line_follower/` — A line follower sketch with wireless PID tuning support. Commands can be sent over Serial/Bluetooth to set KP, KI, KD, integral limits, speeds, and line color. Example commands: `KP:0.15`, `KI:0.0001`, `KD:5.0`, `ILIMIT:1000`, `MAX:180`, `BASE:150`, `BLACK` / `WHITE`, `STATUS`, `HELP`.
-- `Nano_test_code/line_follower_github/` — Original line follower code used for quick testing without wireless tuning.
-- `Nano_test_code/PID_Bluethooth/` — A more advanced sketch that implements start/stop states, improved calibration handling, and robust Bluetooth command parsing for PID and system control.
-- `Nano_test_code/Moter_test/` — Simple motor test (forward, backward, left, right) using SparkFun TB6612.
-- `Nano_test_code/QTR_test/` — QTR-8A sensor test example that prints raw sensor readings.
-
-How to use these sketches:
-1. Open the appropriate `.ino` in the Arduino IDE or use PlatformIO in VSCode.
-2. Install dependencies:
-- SparkFun TB6612 library (SparkFun_TB6612)
-- QTRSensors library (Pololu QTRSensors or QTRSensors)
-3. Connect your microcontroller and sensors as per the pin definitions in the sketch. The sketches use `INPUT_PULLUP` for button pins (connect button between the pin and GND).
-4. Use the Arduino Serial Monitor (or a Bluetooth terminal app for wireless sketches) at `9600` baud to send commands and read feedback.
-
-Notes & Tips:
-- The wireless PID sketches can accept very small and very large floating values — they try to parse floats robustly but be careful with extremely large numbers and motor limits.
-- If you test on Windows and you see LF/CRLF warnings, consider adding a `.gitattributes` or adjusting `core.autocrlf` (see earlier README sections for guidance).
-- The test code is intended for development and testing; use a stable branch for production firmware and keep these sketches in the `Nano_test_code/` tree for experiments.
-
-If you'd like, I can:
-- Add short README files inside each `Nano_test_code/*` folder describing exact pinouts and sample commands, or
-- Create smaller example sketches focused on specific features (e.g., only PID tuning or a demonstration log script).
+- Work in smaller branches for major experiments (e.g., `wip/pid-tuning`).
+- Keep `main` stable and push incremental changes with descriptive commit messages.
+- Use a separate branch for normalization (CRLF/LF) if you want to reformat many files.
 
 ## Contributing
 
-As this project is in early development, contributions and suggestions are welcome! Feel free to open issues or submit pull requests.
+Contributions are welcome — please open issues or PRs and use the `wip/*` naming convention for work-in-progress branches.
 
 ## License
 
-This project is licensed under the terms specified in the LICENSE file.
-
-## Author
-
-*Project started: 2025*
+This project is licensed under the terms specified in `LICENSE`.
 
 ---
 
-**Note**: This is an active development project. Features and documentation will be updated as the project progresses.
+**Note**: This project is actively developed. The documentation and code will be updated frequently.
 

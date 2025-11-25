@@ -1,0 +1,98 @@
+# Micromouse Line Follower
+
+🚧 **Project Status: In Development** 🚧
+
+This repository contains the beginnings of a Micromouse line-following robot project. The firmware targets ESP32 as the main development board and includes Arduino Nano test sketches under `testing_phase_code/Nano_test_code/` that show motor and sensor tests, plus wireless PID tuning examples.
+
+## Overview
+
+The goal is to build a reliable line-following robot using a QTR sensor array, TB6612 motor driver, and an ESP32 (or Arduino Nano for simple tests). The codebase will grow to include motor control, PID tuning, calibration, and eventually navigation and obstacle-handling modules.
+
+## Hardware
+
+- **Primary target**: ESP32 development boards
+- **Optional**: Arduino Nano (test sketches)
+- **Motor Driver**: TB6612FNG
+- **Line Sensors**: QTR analog/RC sensor arrays
+- **Other components**: Motors, wheels, battery, jumper wires, and a chassis
+
+## Project Structure
+```
+micromouse-line-follower/       # Repo root
+├── .git/                      # Git metadata (hidden)
+├── .github/                   # GitHub workflows and CI (optional)
+├── micromouse/                # Main ESP32 firmware project (PlatformIO)
+│   ├── docs/
+│   │   └── component_datasheet/
+│   │       ├── esp32_datasheet_en.pdf
+│   │       ├── L293D.PDF
+│   │       └── TB6612FNG.PDF
+│   ├── include/
+│   ├── lib/
+│   ├── platformio.ini        # PlatformIO configuration for ESP32
++│   ├── src/
+│   │   └── main.cpp
+│   └── test/
+├── testing_phase_code/        # Test-only code (Arduino NANO sketches and tests)
+│   └── Nano_test_code/
+│       ├── line_follower/
+│       ├── line_follower_github/
+│       ├── PID_Bluethooth/
+│       ├── Moter_test/
+│       └── QTR_test/
+├── README.md                  # Top-level README (this file)
+└── LICENSE
+```
+
+## Getting Started
+
+### Prerequisites
+
+- [PlatformIO](https://platformio.org/) (recommended for ESP32 development)
+- Arduino IDE (for the Nano example sketches)
+- ESP32 or Arduino Nano board, TB6612 motor driver, QTR8 sensor array, motors and battery
+
+### Quick Start (ESP32 - PlatformIO)
+
+```powershell
+cd 'C:\projects\micromouse\micromouse-line-follower\micromouse'
+pio run
+pio run -e esp32dev -t upload
+```
+
+### Quick Start (Arduino Nano - Arduino IDE)
+
+1. Open Arduino IDE > File > Open > `testing_phase_code/Nano_test_code/<sketch>/sketch.ino`.
+2. Install required libraries in Arduino Library Manager (SparkFun_TB6612, QTRSensors).
+3. Select the correct board and port, then upload.
+
+## Tests and Example Sketches (Nano_test_code)
+
+This folder contains simple sketches and tests targeted at Arduino Nano or similar 8-bit boards, useful while developing sensors and motor drivers:
+
+- `testing_phase_code/Nano_test_code/line_follower/` — Wireless PID line following sketch that accepts Serial/Bluetooth commands (KP, KI, KD, ILIMIT, MAX, BASE, BLACK/WHITE, STATUS, HELP). Designed for real-time tuning.
+- `testing_phase_code/Nano_test_code/PID_Bluethooth/` — An advanced Bluetooth serial sketch with state handling (IDLE, CALIBRATING, RUNNING), safe start/stop, and command parsing.
+- `testing_phase_code/Nano_test_code/line_follower_github/` — A basic line follower sketch for quick functional testing.
+- `testing_phase_code/Nano_test_code/Moter_test/` — Motor test commands for TB6612 (Forward, Backward, Left, Right, Stop).
+- `testing_phase_code/Nano_test_code/QTR_test/` — Raw QTR sensor test code printing sensor readings.
+
+For each sketch, the comments at the top list the pin assignments and a summary of commands or behavior.
+
+## Recommended workflow for edits and testing
+
+- Work in smaller branches for major experiments (e.g., `wip/pid-tuning`).
+- Keep `main` stable and push incremental changes with descriptive commit messages.
+- Use a separate branch for normalization (CRLF/LF) if you want to reformat many files.
+
+## Contributing
+
+Contributions are welcome — please open issues or PRs and use the `wip/*` naming convention for work-in-progress branches.
+
+## License
+
+This project is licensed under the terms specified in `LICENSE`.
+
+---
+
+**Note**: This project is actively developed. The documentation and code will be updated frequently.
+
