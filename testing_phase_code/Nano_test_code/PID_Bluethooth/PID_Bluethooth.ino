@@ -3,6 +3,7 @@
 
 // Motor pins
 #define AIN1 8
+
 #define BIN1 5
 #define AIN2 9
 #define BIN2 4
@@ -25,9 +26,9 @@ unsigned int sensors1[NUM_SENSORS];
 QTRSensors qtra;
 
 // PID Parameters - Adjustable via Bluetooth
-float kp = 0.37;
+float kp = 0.1;
 float ki = 0.0;
-float kd = 0.0;
+float kd = 2.1;
 
 // Speed settings
 int maxSpeed = 180;
@@ -195,7 +196,8 @@ void runLineFollowing() {
   int rightSpeed = constrain(baseSpeed - correction, 0, maxSpeed);
   int leftSpeed = constrain(baseSpeed + correction, 0, maxSpeed);
   
-  // Drive motors
+  // Drive motors#
+  
   motor1.drive(rightSpeed);
   motor2.drive(leftSpeed);
 }

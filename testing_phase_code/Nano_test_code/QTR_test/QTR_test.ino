@@ -19,7 +19,7 @@ void setup() {
   
   // Optional: Set analog reference (default is 5V)
   // analogReference(DEFAULT); // 5V
-  // analogReference(INTERNAL); // 1.1V (for 3.3V systems)
+  //analogReference(INTERNAL); // 1.1V (for 3.3V systems)
   
   delay(1000);
 }
