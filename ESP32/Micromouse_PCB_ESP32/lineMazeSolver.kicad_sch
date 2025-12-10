@@ -5720,7 +5720,7 @@
 		(uuid "a8e523d3-30c8-4e3b-a2b1-fb57dc7842d5")
 	)
 	(label "SW3"
-		(at 124.46 67.31 0)
+		(at 115.57 67.31 0)
 		(effects
 			(font
 				(size 1.27 1.27)

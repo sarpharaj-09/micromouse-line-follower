@@ -1,4 +1,4 @@
-26760271153158625
+26762035034565831
 Battery
 BatteryClip_Keystone_54_D16-19mm
 Battery clip for batteries with a diameter between 16-19 mm: https://www.keyelco.com/product.cfm/product_id/826
@@ -59338,6 +59338,13 @@ ceramic
 0
 3
 3
+DM-OLED096-636
+MODULE_DM-OLED096-636
+
+
+0
+8
+8
 Diode_SMD
 D_0201_0603Metric
 Diode SMD 0201 (0603 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: https://www.vishay.com/docs/20052/crcw0201e3.pdf), generated with kicad-footprint-generator
@@ -61361,6 +61368,13 @@ One digit LED 7 segment SA39-11 SC39-11 SA39-12 SC39-12
 0
 10
 10
+ESP32-DEVKIT-V1
+MODULE_ESP32_DEVKIT_V1
+
+
+0
+30
+30
 Ferrite_THT
 LairdTech_28C0236-0JW-10
 Ferrite, vertical, LairdTech 28C0236-0JW-10, https://assets.lairdtech.com/home/brandworld/files/28C0236-0JW-10.pdf, JW Miller core https://www.bourns.com/products/magnetic-products/j.w.-miller-through-hole-ferrite-beads-emi-filters
@@ -106350,10 +106364,3 @@ Varistor VF
 0
 2
 2
-micromouse1.0
-tbfng motor driver
-
-
-0
-16
-16

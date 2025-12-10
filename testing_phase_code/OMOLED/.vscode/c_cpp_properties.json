@@ -1,0 +1,60 @@
+//
+// !!! WARNING !!! AUTO-GENERATED FILE!
+// PLEASE DO NOT MODIFY IT AND USE "platformio.ini":
+// https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags
+//
+{
+    "configurations": [
+        {
+            "name": "PlatformIO",
+            "includePath": [
+                "C:/projects/micromouse/micromouse-line-follower/testing_phase_code/OMOLED/include",
+                "C:/projects/micromouse/micromouse-line-follower/testing_phase_code/OMOLED/src",
+                "C:/projects/micromouse/micromouse-line-follower/testing_phase_code/OMOLED/.pio/libdeps/seeeduino/U8g2/src",
+                "C:/Users/SARPHARAJ/.platformio/packages/framework-arduino-avr/libraries/Wire/src",
+                "C:/Users/SARPHARAJ/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
+                "C:/Users/SARPHARAJ/.platformio/packages/framework-arduino-avr/cores/arduino",
+                "C:/Users/SARPHARAJ/.platformio/packages/framework-arduino-avr/variants/standard",
+                "C:/projects/micromouse/micromouse-line-follower/testing_phase_code/OMOLED/lib/SSD1306_OLED_Display-1.0.5",
+                "C:/Users/SARPHARAJ/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
+                "C:/Users/SARPHARAJ/.platformio/packages/framework-arduino-avr/libraries/HID/src",
+                "C:/Users/SARPHARAJ/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src",
+                ""
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "path": [
+                    "C:/projects/micromouse/micromouse-line-follower/testing_phase_code/OMOLED/include",
+                    "C:/projects/micromouse/micromouse-line-follower/testing_phase_code/OMOLED/src",
+                    "C:/projects/micromouse/micromouse-line-follower/testing_phase_code/OMOLED/.pio/libdeps/seeeduino/U8g2/src",
+                    "C:/Users/SARPHARAJ/.platformio/packages/framework-arduino-avr/libraries/Wire/src",
+                    "C:/Users/SARPHARAJ/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
+                    "C:/Users/SARPHARAJ/.platformio/packages/framework-arduino-avr/cores/arduino",
+                    "C:/Users/SARPHARAJ/.platformio/packages/framework-arduino-avr/variants/standard",
+                    "C:/projects/micromouse/micromouse-line-follower/testing_phase_code/OMOLED/lib/SSD1306_OLED_Display-1.0.5",
+                    "C:/Users/SARPHARAJ/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
+                    "C:/Users/SARPHARAJ/.platformio/packages/framework-arduino-avr/libraries/HID/src",
+                    "C:/Users/SARPHARAJ/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src",
+                    ""
+                ]
+            },
+            "defines": [
+                "PLATFORMIO=60118",
+                "ARDUINO_AVR_SEEEDUINO",
+                "F_CPU=16000000L",
+                "ARDUINO_ARCH_AVR",
+                "ARDUINO=10808",
+                "__AVR_ATmega328P__",
+                ""
+            ],
+            "cStandard": "gnu11",
+            "cppStandard": "gnu++11",
+            "compilerPath": "C:/Users/SARPHARAJ/.platformio/packages/toolchain-atmelavr/bin/avr-gcc.exe",
+            "compilerArgs": [
+                "-mmcu=atmega328p",
+                ""
+            ]
+        }
+    ],
+    "version": 4
+}
