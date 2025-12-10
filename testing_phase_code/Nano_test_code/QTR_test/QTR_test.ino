@@ -13,6 +13,8 @@ void setup() {
   Serial.begin(9600);
   Serial.println("QTR-8A Analog Sensor Test with Library");
   
+  analogReference(EXTERNAL);
+  
   // Configure for analog sensors
   qtr.setTypeAnalog();
   qtr.setSensorPins((const uint8_t[]){A0, A1, A2, A3, A4, A5, A6, A7}, sensorCount);

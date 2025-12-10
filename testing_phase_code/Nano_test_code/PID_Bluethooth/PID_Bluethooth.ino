@@ -2,13 +2,13 @@
 #include <QTRSensors.h>
 
 // Motor pins
-#define AIN1 8
+#define AIN1 5
 
-#define BIN1 5
-#define AIN2 9
-#define BIN2 4
-#define PWMA 6
-#define PWMB 3
+#define BIN1 8
+#define AIN2 4
+#define BIN2 9
+#define PWMA 3
+#define PWMB 6
 #define STBY 10
 
 const int offsetA = 1;
@@ -24,15 +24,16 @@ const int offsetB = 1;
 #define SENSOR_TIMEOUT 2500
 unsigned int sensors1[NUM_SENSORS];
 QTRSensors qtra;
+int thr[8];
 
 // PID Parameters - Adjustable via Bluetooth
-float kp = 0.1;
+float kp = 0.2;
 float ki = 0.0;
-float kd = 2.1;
+float kd = 1.5;
 
 // Speed settings
-int maxSpeed = 180;
-int baseSpeed = 180;
+int maxSpeed = 150;
+int baseSpeed = 150;
 
 // Line tracking
 bool followBlackLine = false;
@@ -54,12 +55,14 @@ Motor motor2 = Motor(BIN1, BIN2, PWMB, offsetB, STBY);
 
 // ========== SETUP ==========
 void setup() {
+
+   analogReference(EXTERNAL);
   // Pre-allocate buffer for better performance
   btBuffer.reserve(32);
   
   // Configure sensors
   qtra.setTypeAnalog();
-  qtra.setSensorPins((const uint8_t[]) {A0, A1, A2, A3, A4, A5, A6, A7}, NUM_SENSORS);
+  qtra.setSensorPins((const uint8_t[]) {A7, A6, A5, A4, A3, A2, A1, A0}, NUM_SENSORS);
   qtra.setTimeout(SENSOR_TIMEOUT);
 
   // Configure pins
@@ -166,6 +169,26 @@ void calibration() {
   brake(motor1, motor2);
   digitalWrite(LED, LOW);
   Serial.println("Calibration Complete!");
+//////////printing calibrated value
+
+  for (int i = 0; i < NUM_SENSORS; i++)
+  {
+    Serial.print(qtra.calibrationOn.minimum[i]);
+    Serial.print(' ');
+    thr[i] = (qtra.calibrationOn.minimum[i] + qtra.calibrationOn.maximum[i]) / 2;
+    // Calculating the threshold value for making the decision above thr black line and below white line
+  }
+  Serial.println();
+  for (int i = 0; i < NUM_SENSORS; i++)
+  {
+    Serial.print(qtra.calibrationOn.maximum[i]);
+    Serial.print(' ');
+  }
+  Serial.println();
+  Serial.println(thr[0]);
+  Serial.println(thr[7]);
+
+////////////////end
   Serial.println("Press SW1 to start");
   blinkLED(2, 200);
 }
@@ -189,8 +212,8 @@ void runLineFollowing() {
   lastError = error;
   
   // PID calculation
-  float correction = kp * error + ki * integral + kd * derivative;
-  correction = constrain(correction, -1000.0, 1000.0);
+  float correction = kp * error + kd * derivative;
+  correction = constrain(correction, -maxSpeed, maxSpeed);
   
   // Calculate motor speeds
   int rightSpeed = constrain(baseSpeed - correction, 0, maxSpeed);
