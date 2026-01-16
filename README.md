@@ -1,92 +1,159 @@
-# Micromouse Line Follower
+﻿# Micromouse Line Follower
 
-🚧 **Project Status: In Development** 🚧
+ **Project Status: In Development** 
 
-This repository contains the beginnings of a Micromouse line-following robot project. The firmware targets ESP32 as the main development board and includes Arduino Nano test sketches under `testing_phase_code/Nano_test_code/` that show motor and sensor tests, plus wireless PID tuning examples.
+A line-following micromouse robot project combining hardware design (KiCAD PCB layouts) with firmware development. This repository includes both Arduino Nano and ESP32 implementations, with comprehensive testing code and calibration tools.
 
 ## Overview
 
-The goal is to build a reliable line-following robot using a QTR sensor array, TB6612 motor driver, and an ESP32 (or Arduino Nano for simple tests). The codebase will grow to include motor control, PID tuning, calibration, and eventually navigation and obstacle-handling modules.
+This project aims to build a reliable line-following robot using:
+- **QTR-8 sensor array** for line detection
+- **TB6612FNG motor driver** for motor control
+- **Maze solving algorithm** with path simplification
+- **PID control** for stable line following
+- Dual MCU support: **ESP32** (primary) and **Arduino Nano** (testing)
+
+The firmware includes motor control, PID tuning, sensor calibration, and a maze-solving algorithm that records and simplifies paths.
 
 ## Hardware
 
-- **Primary target**: ESP32 development boards
-- **Optional**: Arduino Nano (test sketches)
+### Microcontrollers
+- **ESP32 Development Board** (primary target)
+- **Arduino Nano** (for testing and prototyping)
+
+### Components
 - **Motor Driver**: TB6612FNG
-- **Line Sensors**: QTR analog/RC sensor arrays
-- **Other components**: Motors, wheels, battery, jumper wires, and a chassis
+- **Line Sensors**: QTR-8 analog/RC sensor array
+- **Motors**: DC motors for wheels
+- **Power**: Battery pack
+- **Display**: DM-OLED096 (0.96" OLED) - in design
+- **Miscellaneous**: Jumper wires, resistors, capacitors
 
 ## Project Structure
+
 ```
-micromouse-line-follower/       # Repo root
-├── .git/                      # Git metadata (hidden)
-├── .github/                   # GitHub workflows and CI (optional)
-├── micromouse/                # Main ESP32 firmware project (PlatformIO)
-│   ├── docs/
-│   │   └── component_datasheet/
-│   │       ├── esp32_datasheet_en.pdf
-│   │       ├── L293D.PDF
-│   │       └── TB6612FNG.PDF
-│   ├── include/
-│   ├── lib/
-│   ├── platformio.ini        # PlatformIO configuration for ESP32
-+│   ├── src/
-│   │   └── main.cpp
-│   └── test/
-├── testing_phase_code/        # Test-only code (Arduino NANO sketches and tests)
-│   └── Nano_test_code/
-│       ├── line_follower/
-│       ├── line_follower_github/
-│       ├── PID_Bluethooth/
-│       ├── Moter_test/
-│       └── QTR_test/
-├── README.md                  # Top-level README (this file)
-└── LICENSE
+micromouse-line-follower/
+ Arduino_Nano/               # Arduino Nano PCB design (KiCAD)
+    pcb_v1/                # Version 1 PCB layout
+        DM-OLED096-636/    # OLED display footprint & symbol
+        ESP32-DEVKIT-V1/   # ESP32 footprint & symbol
+        MP1584_buck/       # Buck converter module
+        kikad_dsign.*      # KiCAD project files
+ ESP32/                      # ESP32 PCB design (KiCAD)
+    pcb_v1/                # Version 1 PCB layout
+        DM-OLED096-636/    # OLED display footprint & symbol
+        ESP32-DEVKIT-V1/   # ESP32 footprint & symbol
+        lineMazeSolver.*   # KiCAD project files
+ micromouse_v1/             # Main firmware project (PlatformIO)
+    micromouse_v1/
+        platformio.ini     # PlatformIO configuration
+        include/           # Header files
+        lib/               # Dependencies (QTRSensors, TB6612FNG)
+        src/
+           main.cpp       # Main firmware with maze solving & PID
+        test/              # Unit tests
+ testing_phase_code/        # Standalone test sketches
+    ESP32_test_code/       # ESP32-specific tests
+       qtrSensor.ino     # QTR sensor test
+    Nano_test_code/        # Arduino Nano tests
+        Moter_test/        # Motor driver tests
+        PID_Bluethooth/    # Bluetooth PID tuning
+        plotter/           # Serial plotter data
+        QTR_test/          # QTR sensor calibration
+ README.md
+```
+
+## Firmware Features
+
+### Current Implementation (main.cpp)
+- **8-channel QTR sensor** integration with calibration
+- **PID-based line following** with configurable gains (Kp, Kd)
+- **Maze solving algorithm** with wall detection and path recording
+- **Path simplification** to optimize shortest route
+- **Motor control** with variable speed and direction
+- **Turn decision logic** (left, straight, right)
+
+### Pin Configuration (Arduino Nano)
+```
+Motor Control:
+  - Motor 1: AIN1=4, AIN2=5, PWMA=3
+  - Motor 2: BIN1=8, BIN2=9, PWMB=6
+Control:
+  - Switches: SW1=10, SW2=11, SW3=12
+  - LED: 7
 ```
 
 ## Getting Started
 
 ### Prerequisites
 
-- [PlatformIO](https://platformio.org/) (recommended for ESP32 development)
-- Arduino IDE (for the Nano example sketches)
-- ESP32 or Arduino Nano board, TB6612 motor driver, QTR8 sensor array, motors and battery
+- [PlatformIO](https://platformio.org/) (for ESP32 development)
+- [Arduino IDE](https://www.arduino.cc/en/software) (for Nano sketches)
+- Required libraries:
+  - `SparkFun_TB6612` (Motor Driver)
+  - `QTRSensors` (Line Sensor Array)
 
-### Quick Start (ESP32 - PlatformIO)
+### Building & Uploading (PlatformIO/ESP32)
 
 ```powershell
-cd 'C:\projects\micromouse\micromouse-line-follower\micromouse'
-pio run
-pio run -e esp32dev -t upload
+cd micromouse_v1/micromouse_v1
+pio run              # Build
+pio run -t upload    # Upload to connected ESP32
 ```
 
-### Quick Start (Arduino Nano - Arduino IDE)
+### Testing (Arduino Nano)
 
-1. Open Arduino IDE > File > Open > `testing_phase_code/Nano_test_code/<sketch>/sketch.ino`.
-2. Install required libraries in Arduino Library Manager (SparkFun_TB6612, QTRSensors).
-3. Select the correct board and port, then upload.
+1. Open Arduino IDE
+2. Load a test sketch: `testing_phase_code/Nano_test_code/<test_folder>/<sketch>.ino`
+3. Install dependencies via Library Manager
+4. Select board (Arduino Nano) and COM port
+5. Upload
 
-## Tests and Example Sketches (Nano_test_code)
+### Test Sketches Available
 
-This folder contains simple sketches and tests targeted at Arduino Nano or similar 8-bit boards, useful while developing sensors and motor drivers:
+| Sketch | Purpose |
+|--------|---------|
+| `Moter_test` | Test TB6612 motor driver (forward, backward, turn) |
+| `QTR_test` | Read raw QTR sensor values and calibrate |
+| `PID_Bluethooth` | Wireless PID tuning via Bluetooth serial |
+| `plotter` | Stream sensor data for Serial Plotter visualization |
 
-- `testing_phase_code/Nano_test_code/line_follower/` — Wireless PID line following sketch that accepts Serial/Bluetooth commands (KP, KI, KD, ILIMIT, MAX, BASE, BLACK/WHITE, STATUS, HELP). Designed for real-time tuning.
-- `testing_phase_code/Nano_test_code/PID_Bluethooth/` — An advanced Bluetooth serial sketch with state handling (IDLE, CALIBRATING, RUNNING), safe start/stop, and command parsing.
-- `testing_phase_code/Nano_test_code/line_follower_github/` — A basic line follower sketch for quick functional testing.
-- `testing_phase_code/Nano_test_code/Moter_test/` — Motor test commands for TB6612 (Forward, Backward, Left, Right, Stop).
-- `testing_phase_code/Nano_test_code/QTR_test/` — Raw QTR sensor test code printing sensor readings.
+## Development Workflow
 
-For each sketch, the comments at the top list the pin assignments and a summary of commands or behavior.
+- **Feature branches**: Use `wip/*` prefix for work-in-progress branches
+- **Main branch**: Keep stable with tested, documented commits
+- **Testing**: Validate on both hardware and in simulation before merging
+- **Documentation**: Update this README and code comments when adding features
 
-## Recommended workflow for edits and testing
+## PCB Design Status
 
-- Work in smaller branches for major experiments (e.g., `wip/pid-tuning`).
-- Keep `main` stable and push incremental changes with descriptive commit messages.
-- Use a separate branch for normalization (CRLF/LF) if you want to reformat many files.
+- **Arduino Nano v1**: In design phase - includes OLED display, buck converter
+- **ESP32 v1**: In design phase - primary development board layout
+
+## Troubleshooting
+
+### Sensor Calibration Issues
+- Run `QTR_test` to verify raw sensor values
+- Check sensor array alignment over the line
+- Verify power supply voltage (QTR operates 3.3-5V)
+
+### Motor Control Issues
+- Use `Moter_test` to verify TB6612 pin connections
+- Check PWM pins are available on your MCU
+- Verify motor power supply is adequate
+
+### PID Tuning
+- Use `PID_Bluethooth` for real-time parameter adjustment
+- Start with low Kp/Kd values and increase gradually
+- Monitor motor oscillation and response time
 
 ## Contributing
 
-Contributions are welcome — please open issues or PRs and use the `wip/*` naming convention for work-in-progress branches.
+Contributions welcome! Please:
+1. Create a feature branch (`wip/feature-name`)
+2. Test thoroughly on hardware
+3. Submit a pull request with clear description
+4. Update documentation as needed
 
 ## License
 
@@ -94,5 +161,5 @@ This project is licensed under the terms specified in `LICENSE`.
 
 ---
 
-**Note**: This project is actively developed. The documentation and code will be updated frequently.
-
+**Last Updated**: January 2026  
+**Note**: This project is actively developed. Features and documentation are updated frequently.
